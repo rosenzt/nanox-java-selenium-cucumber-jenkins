@@ -24,6 +24,9 @@ public class Hooks {
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--disable-gpu", "--remote-allow-origins=*");
+            options.addArguments("--headless");  // Run Chrome without UI
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
             driver = new ChromeDriver(options);
             driver.manage().window().maximize();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
