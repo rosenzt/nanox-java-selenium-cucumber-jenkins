@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/rosenzt/nanox-java-selenium-cucumber-jenkins.git'
+                git 'https://github.com/rosenzt/nanox-java-selenium-cucumber-jenkins.git'
             }
         }
 
@@ -18,6 +18,22 @@ pipeline {
             steps {
                 sh 'mvn test'
             }
+        }
+    }
+
+    post {
+        success {
+            emailext subject: "✅ BUILD SUCCESS: Java-Selenium-Cucumber",
+                     body: "The Jenkins job ran successfully.\n\nCheck the report: ${BUILD_URL}/testReport",
+                     recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                     to: 'your-email@yahoo.com'
+        }
+
+        failure {
+            emailext subject: "❌ BUILD FAILED: Java-Selenium-Cucumber",
+                     body: "The Jenkins job failed!\n\nCheck the logs here: ${BUILD_URL}/console",
+                     recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                     to: 'your-email@yahoo.com'
         }
     }
 }
