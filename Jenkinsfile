@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/rosenzt/nanox-java-selenium-cucumber-jenkins.git'
+                git 'https://github.com/rosenzt/nanox-java-selenium-cucumber-jenkins.git'
             }
         }
 
@@ -22,18 +22,31 @@ pipeline {
     }
 
     post {
+        always {
+            script {
+                def emailConfig = readProperties file: 'src/test/resources/config.properties'
+                def recipient = emailConfig['EMAIL_RECIPIENT']
+
+                echo "Email will be sent to: ${recipient}"
+
+                env.RECIPIENT_EMAIL = recipient
+            }
+        }
+
         success {
-            emailext subject: "✅ BUILD SUCCESS: Java-Selenium-Cucumber",
-                     body: "The Jenkins job ran successfully.\n\nCheck the report: ${BUILD_URL}/testReport",
-                     recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                     to: 'talr@meteo-logic.com'
+            emailext (
+                subject: "Jenkins Build Successful",
+                body: "The Jenkins pipeline build was successful!",
+                to: "${env.RECIPIENT_EMAIL}"
+            )
         }
 
         failure {
-            emailext subject: "❌ BUILD FAILED: Java-Selenium-Cucumber",
-                     body: "The Jenkins job failed!\n\nCheck the logs here: ${BUILD_URL}/console",
-                     recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                     to: 'talr@meteo-logic.com'
+            emailext (
+                subject: "Jenkins Build Failed",
+                body: "The Jenkins pipeline build has failed!",
+                to: "${env.RECIPIENT_EMAIL}"
+            )
         }
     }
 }
