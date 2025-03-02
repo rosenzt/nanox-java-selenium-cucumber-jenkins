@@ -26,14 +26,14 @@ pipeline {
             emailext subject: "✅ BUILD SUCCESS: Java-Selenium-Cucumber",
                      body: "The Jenkins job ran successfully.\n\nCheck the report: ${BUILD_URL}/testReport",
                      recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                     to: 'your-email@yahoo.com'
+                     to: 'rosenzt@yahoo.com'
         }
 
         failure {
             emailext subject: "❌ BUILD FAILED: Java-Selenium-Cucumber",
                      body: "The Jenkins job failed!\n\nCheck the logs here: ${BUILD_URL}/console",
                      recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                     to: 'your-email@yahoo.com'
+                     to: 'rosenzt@yahoo.com'
         }
     }
 }
