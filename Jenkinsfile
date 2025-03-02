@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        RECIPIENT_EMAIL = "${env.EMAIL_RECIPIENT}"  // Set in Jenkins "Global Properties"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -23,14 +27,7 @@ pipeline {
 
     post {
         always {
-            script {
-                def emailConfig = readProperties file: 'src/test/resources/config.properties'
-                def recipient = emailConfig['EMAIL_RECIPIENT']
-
-                echo "Email will be sent to: ${recipient}"
-
-                env.RECIPIENT_EMAIL = recipient
-            }
+            echo "Email will be sent to: ${env.RECIPIENT_EMAIL}"
         }
 
         success {
