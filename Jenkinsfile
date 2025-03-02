@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/rosenzt/nanox-java-selenium-cucumber-jenkins.git'
+                git branch: 'main', url: 'https://github.com/rosenzt/nanox-java-selenium-cucumber-jenkins.git'
             }
         }
 
